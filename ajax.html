@@ -1,0 +1,27 @@
+<html>
+<head></head>
+<body>
+<script src="jquery.js"></script>
+<script>
+function upd(){
+	var formData = {
+		'id': 2,
+		'referencia': '12345',
+		'precio': 150000,
+		'peso': 1,
+		'categoria': 1,
+		'stock': 20,
+		'nombre': 'Guantes arquero'
+	}
+	$.post('http://localhost/stock_productos/web/index.php?r=productos/update&id=2', formData, function(data){
+		//data=JSON.parse(data);
+		console.log(data);
+		if(data.res==1){
+		
+		}//else alert('Ha ocurido un error'+data)
+	});
+}
+</script>
+<a href="javascript:void(0);" onclick="upd();">Upd!</a>
+</body>
+</html>
