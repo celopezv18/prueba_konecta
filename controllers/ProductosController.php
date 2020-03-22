@@ -25,6 +25,7 @@ class ProductosController extends Controller{
 	 
 	 //Acciones
 	 public function actionList(){
+		
 		 //Listar productos
 		 //$productos = Productos::model()->findAll();
 		 $productos = Productos::find()->all();
@@ -41,6 +42,7 @@ class ProductosController extends Controller{
 			 }
 			 //respuesta
 			 //$this->_sendResponse(200, json_encode($rows));
+			 //echo print_r($rows[0]['id'], 1);
 			 $this->_sendResponse(200, json_encode($rows));
 		 }
 	 }
@@ -145,7 +147,7 @@ class ProductosController extends Controller{
 			$this->_sendResponse(400, 
 					sprintf("Error: No se encontró el producto con ID <b>%s</b>.", $_GET['id']) );
 
-		// Delete the model
+		// Eliminar registro
 		$num = $producto->delete();
 		if($num>0)
 			$this->_sendResponse(200, $num);
@@ -153,6 +155,39 @@ class ProductosController extends Controller{
 			$this->_sendResponse(500, 
 					sprintf("Error: No fue posible eliminar el producto con ID 
 					<b>%s</b>.", $_GET['id']) ); 
+	 }
+	 
+	 //Método q resta del stock del producto al realizarse una venta
+	 public function actionVenta(){ 
+		 if(!isset($_GET['id']) or !(isset($_GET['cantidad']))){
+			 $this->_sendResponse(500, 'Error: El parámetro <b>id</b> es requerido');
+		}
+		
+		$cantidad = $_GET['cantidad'];
+		$producto = Productos::find()
+			->where(['id' => $_GET['id']])
+			->one();
+		
+		// Validar respuesta
+		if($producto === null)
+			$this->_sendResponse(400, 
+					sprintf("Error: No se encontró el producto con ID <b>%s</b>.", $_GET['id']) );
+		
+		
+		if($producto->stock >= $_GET['cantidad']){
+		
+			$producto->stock = ($producto->stock - $_GET['cantidad']);
+			$producto->fecha_venta = date('Y-m-d h:m:s');
+			
+			if($producto->save())
+				$this->_sendResponse(200, json_encode($producto));
+			else{
+				//Error al guardar
+				 $msg = "<h1>No se puedo guardar la información</h1>";
+				 $this->_sendResponse(500, $msg );
+			}
+		}else $this->_sendResponse(500, "No hay suficiente stock para este producto" );
+		
 	 }
 	 
 	 private function _sendResponse($status = 200, $body = '', $content_type = 'text/html'){
