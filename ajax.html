@@ -6,12 +6,11 @@
 function upd(){
 	var formData = {
 		'id': 2,
-		'referencia': '12345',
+		'referencia': '1224345',
 		'precio': 150000,
 		'peso': 1,
-		'categoria': 1,
-		'stock': 20,
-		'nombre': 'Guantes arquero'
+		'categoria': 2,
+		'stock': 20
 	}
 	$.post('http://localhost/stock_productos/web/index.php?r=productos/update&id=2', formData, function(data){
 		//data=JSON.parse(data);
@@ -21,7 +20,27 @@ function upd(){
 		}//else alert('Ha ocurido un error'+data)
 	});
 }
+
+function create(){
+	var formData = {
+		'referencia': '12348',
+		'precio': 150000,
+		'peso': 1,
+		'categoria': 1,
+		'stock': 20,
+		'fecha_creacion': '2020-03-21 00:00:00',
+		'nombre': 'Guantes arquero'
+	}
+	$.post('http://localhost/stock_productos/web/index.php?r=productos/create', formData, function(data){
+		//data=JSON.parse(data);
+		console.log(data);
+		if(data.res==1){
+		
+		}//else alert('Ha ocurido un error'+data)
+	});
+}
 </script>
-<a href="javascript:void(0);" onclick="upd();">Upd!</a>
+<a href="javascript:void(0);" onclick="upd();">Upd!</a><br>
+<a href="javascript:void(0);" onclick="create();">Create!</a>
 </body>
 </html>
