@@ -25,7 +25,6 @@ class ProductosController extends Controller{
 	 
 	 //Acciones
 	 public function actionList(){
-		
 		 //Listar productos
 		 //$productos = Productos::model()->findAll();
 		 $productos = Productos::find()->all();
